@@ -23,3 +23,16 @@ body {
     display: flex;
     justify-content: center;
 }
+.scrollable-container {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.scrollable-item {
+    display: inline-block;
+    width: 200px;
+    height: 100px;
+    background-color: lightblue;
+    margin-right: 50px;
+}
