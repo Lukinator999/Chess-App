@@ -1,10 +1,15 @@
+@font-face {
+    font-family: 'Abstante';
+    src: url('../fonts/Abstante-Regular.otf') format('opentype'),
+         url('../fonts/Abstante-Regular.ttf') format('truetype'),
+}
 /*** Allgemein ***/
 /** Grundaussehen für die ganze Seite **/
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Abstante', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #7f8fa6;
+    background-color: #070707;
 }
 /* Aussehen für Abdunkelung und Deaktivierung vom Hintergrund */
 .overlay {
@@ -23,16 +28,21 @@ body {
     display: flex;
     justify-content: center;
 }
+h1 {
+    font-size: 70px;
+    color: white;
+    margin: auto;
+}
 .scrollable-container {
     width: 100%;
     overflow-x: auto;
     white-space: nowrap;
 }
-
 .scrollable-item {
     display: inline-block;
     width: 200px;
-    height: 100px;
+    height: 50px;
     background-color: lightblue;
-    margin-right: 50px;
+    margin-inline: 20px;
+    font-size: 30px;
 }
