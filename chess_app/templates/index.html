@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vokabeltrainer</title>
+    <!-- Importiere das Aussehen aller Objekte -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <!-- Importiere die Funktionen der Seite -->
+    <script src="{% static 'js/main.js' %}"></script>
+</head>
+<body>
+    <div class="center">
+        <h1>GRANDMASTERMIND</h1>
+    </div>
+    <div class="scrollable-container">
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(0)">Own Game</span></div>
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(100)">100</span></div>
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(200)">200</span></div>
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(300)">300</span></div>
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(400)">400</span></div>
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(500)">500</span></div>
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(600)">600</span></div>
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(700)">700</span></div>
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(800)">800</span></div>
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(900)">900</span></div>
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(1000)">1000</span></div>
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(1100)">1100</span></div>
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(1200)">1200</span></div>
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(1300)">1300</span></div>
+        <div class="scrollable-item"><span class="center horizontal-center" onclick="newGame(1400)">1400</span></div>
+    </div>
+</body>
+</html>
