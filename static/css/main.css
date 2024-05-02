@@ -28,10 +28,25 @@ body {
     display: flex;
     justify-content: center;
 }
+.horizontal-center {
+    line-height: 50px;
+    text-align: center;
+}
 h1 {
     font-size: 70px;
     color: white;
-    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollable-container::-webkit-scrollbar {
+    display: none;
+}
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+.scrollable-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 .scrollable-container {
     width: 100%;
@@ -45,4 +60,8 @@ h1 {
     background-color: lightblue;
     margin-inline: 20px;
     font-size: 30px;
+}
+.scrollable-item:hover {
+    transform: scale(1.1);
+    cursor: pointer;
 }
