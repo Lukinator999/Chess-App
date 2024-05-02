@@ -5,19 +5,21 @@ function insertImage() {
     document.querySelectorAll('.box').forEach(image => {
         if (image.innerText.length !== 0) {
             if (image.innerText == 'Wpawn' || image.innerText == 'Bpawn') {
-                image.innerHTML = `${image.innerText} <img class='allimg allpawn' src="${image.innerText}.png" alt="">`
+                var imageName = image.innerText;
+                var imageUrl = staticImagePath + imageName + ".png";
+                image.innerHTML = `${image.innerText} <img class='allimg allpawn' src="${imageUrl}" alt="">`;
                 image.style.cursor = 'pointer'
             }
 
             else {
-                image.innerHTML = `${image.innerText} <img class='allimg' src="${image.innerText}.png" alt="">`
+                var imageName = image.innerText;
+                var imageUrl = staticImagePath + imageName + ".png";
+                image.innerHTML = `${image.innerText} <img class='allimg' src="${imageUrl}" alt="">`;
                 image.style.cursor = 'pointer'
             }
         }
     })
 }
-insertImage()
-
 //Coloring
 function coloring() {
     const color = document.querySelectorAll('.box')
@@ -38,4 +40,3 @@ function coloring() {
         }
     })
 }
-coloring()
