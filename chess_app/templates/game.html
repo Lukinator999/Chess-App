@@ -11,14 +11,14 @@
     <link rel="stylesheet" href="{% static 'css/board.css' %}">
     <!-- Importiere die Funktionen der Seite -->
     <script src="{% static 'js/main.js' %}"></script>
-</head>
-
-<body onload="insertImage(), coloring()">
     <script>
         var staticImagePath = "{% static 'images/' %}";
     </script>
+</head>
+
+<body class="board">
     <h2 id="tog">White</h2>
-    <div class="board">
+    <div>
         <ul>
             <div class="divv" id="row8">
                 <li class="box" id="a8">Brook</li>

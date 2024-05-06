@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-import chess
+from . import chessrules as chess
 
 # Create your views here.
 def home(request):

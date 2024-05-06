@@ -35,47 +35,62 @@ function insertImage() {
         }
     })
 }
+var charToDigi = {
+    "a": 1,
+    "b": 2,
+    "c": 3,
+    "d": 4,
+    "e": 5,
+    "f": 6,
+    "g": 7,
+    "h": 8
+  };
 //Coloring
 function coloring() {
-    const color = document.querySelectorAll('.box')
+    let color = document.querySelectorAll('.box');
     color.forEach(color => {
-        getId = color.id
-        arr = Array.from(getId)
-        arr.shift()
-        aside = eval(arr.pop())
-        aup = eval(arr.shift())
-        a = aside + aup
+        getId = color.id;
+        arr = Array.from(getId);
+        pos1 = eval(arr.pop());
+        pos2 = charToDigi[arr.pop()];
+        sq = pos1 + pos2
 
-        if (a % 2 == 0) {
-            color.style.backgroundColor = '#598C58'
+        if (sq % 2 == 0) {
+            color.style.backgroundColor = '#50f55b';
         }
 
-        if (a % 2 !== 0) {
-            color.style.backgroundColor = '#296d98'
+        if (sq % 2 !== 0) {
+            color.style.backgroundColor = '#add8e6';
         }
     })
 }
-let boxes = document.getElementsByClassName("box");
-boxes.forEach(box => {
-    box.addEventListener("click", function() {
-        piece = box.textContent
-        square = box.id
-        if (piece != "") {
-            let csrftoken = getCookie('csrftoken');
-            fetch('', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': csrftoken
-                },
-                body: 'square=' + encodeURIComponent(square) + '&is_legalmoves_request=true'
-            })
-            .then(data => {
-                
-            })
-            .catch(error => {
-                reject(error);
-            })
-        }
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    insertImage()
+    coloring();
+    let boxes = document.getElementsByClassName("box");
+    console.log(boxes);
+    Array.from(boxes).forEach(box => {
+        console.log(box);
+        box.addEventListener("click", function() {
+            piece = box.textContent;
+            square = box.id;
+            if (piece != "") {
+                let csrftoken = getCookie('csrftoken');
+                fetch('', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: 'square=' + encodeURIComponent(square) + '&is_legalmoves_request=true'
+                })
+                .then(data => {
+                    
+                })
+                .catch(error => {
+                    reject(error);
+                })
+            }
+        })
+    })
 })
