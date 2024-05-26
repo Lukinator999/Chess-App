@@ -11,10 +11,9 @@ def game(request, rat):
     if request.method == 'POST' and request.POST.get('is_legalmove_request', None):
         square = request.POST.get('square')
         print(square)
-        square = chess.parse_square(square)
-        print(square)
-        legal_moves = list(board.legal_moves())
+        legal_moves = list(board.legal_moves)
         moves = [move.uci() for move in legal_moves]
-        print(legal_moves)
-        return JsonResponse({'move': moves})
+        square_moves = [move for move in moves if move[:2] == square]
+        square_fields = [field[2:4] for field in square_moves]
+        return JsonResponse({'moves': square_fields})
     return render(request, "game.html")

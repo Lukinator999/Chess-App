@@ -64,6 +64,18 @@ function coloring() {
         }
     })
 }
+let turn = "W";
+function color_moves(piece, square, moves, turn) {
+    coloring()
+    player = Array.from(piece)[0];
+    if (player == turn) {
+        document.getElementById(square).style.backgroundColor = '#ff4036';
+        moves.forEach(move => {
+            document.getElementById(move).style.backgroundColor = '#dfa800';
+        })
+    }
+    
+}
 document.addEventListener('DOMContentLoaded', function() {
     insertImage();
     coloring();
@@ -72,7 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
         box.addEventListener("click", function() {
             let piece = box.textContent;
             let square = box.id;
-            console.log("Piece:", piece, "Square:", square);
             if (piece != "") {
                 let csrftoken = getCookie('csrftoken');
                 fetch('', {
@@ -84,14 +95,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: 'square=' + encodeURIComponent(square) + '&is_legalmove_request=true'
                 })
                 .then(response => {
-                    console.log("Response received:", response);
                     return response.json();
                 })
                 .then(data => {
-                    console.log("Data received:", data);
-                    data.move.forEach(move => {
-                        console.log("Move:", move);
-                    });
+                    console.log(data.moves);
+                    color_moves(piece, square, data.moves, turn);
                 })
             }
         });
