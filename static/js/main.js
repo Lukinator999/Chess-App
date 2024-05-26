@@ -65,15 +65,14 @@ function coloring() {
     })
 }
 document.addEventListener('DOMContentLoaded', function() {
-    insertImage()
+    insertImage();
     coloring();
     let boxes = document.getElementsByClassName("box");
-    console.log(boxes);
     Array.from(boxes).forEach(box => {
-        console.log(box);
         box.addEventListener("click", function() {
-            piece = box.textContent;
-            square = box.id;
+            let piece = box.textContent;
+            let square = box.id;
+            console.log("Piece:", piece, "Square:", square);
             if (piece != "") {
                 let csrftoken = getCookie('csrftoken');
                 fetch('', {
@@ -82,15 +81,19 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Content-Type': 'application/x-www-form-urlencoded',
                         'X-CSRFToken': csrftoken
                     },
-                    body: 'square=' + encodeURIComponent(square) + '&is_legalmoves_request=true'
+                    body: 'square=' + encodeURIComponent(square) + '&is_legalmove_request=true'
+                })
+                .then(response => {
+                    console.log("Response received:", response);
+                    return response.json();
                 })
                 .then(data => {
-                    
-                })
-                .catch(error => {
-                    reject(error);
+                    console.log("Data received:", data);
+                    data.move.forEach(move => {
+                        console.log("Move:", move);
+                    });
                 })
             }
-        })
-    })
-})
+        });
+    });
+});

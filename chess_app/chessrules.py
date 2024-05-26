@@ -496,7 +496,7 @@ class Piece:
 
     def _repr_svg_(self) -> str:
         import chess.svg
-        return chess.svg.piece(self, size=45)
+        return chess_project.svg.piece(self, size=45)
 
     @classmethod
     def from_symbol(cls, symbol: str) -> Piece:
@@ -1290,7 +1290,7 @@ class BaseBoard:
 
     def _repr_svg_(self) -> str:
         import chess.svg
-        return chess.svg.board(board=self, size=400)
+        return chess_project.svg.board(board=self, size=400)
 
     def __eq__(self, board: object) -> bool:
         if isinstance(board, BaseBoard):
@@ -3666,7 +3666,7 @@ class Board(BaseBoard):
 
     def _repr_svg_(self) -> str:
         import chess.svg
-        return chess.svg.board(
+        return chess_project.svg.board(
             board=self,
             size=390,
             lastmove=self.peek() if self.move_stack else None,
@@ -4107,7 +4107,7 @@ class SquareSet:
 
     def _repr_svg_(self) -> str:
         import chess.svg
-        return chess.svg.board(squares=self, size=390)
+        return chess_project.svg.board(squares=self, size=390)
 
     @classmethod
     def ray(cls, a: Square, b: Square) -> SquareSet:

@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 # Create your tests here.
-import chess
+import chess_project
 
-board = chess.Board()
+board = chess_project.Board()
 print(board)
