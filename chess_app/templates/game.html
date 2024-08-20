@@ -17,7 +17,9 @@
 </head>
 
 <body class="board">
-    <h2 id="tog">White</h2>
+    <div class="center">
+        <h1>GRANDMASTERMIND</h1>
+    </div>
     <div>
         <ul>
             <div class="divv" id="row8">
@@ -129,6 +131,11 @@
             <button class="option-button" data-option="rook"><img src="{% static 'images/Brook.png' %}"></button>
             <button class="option-button" data-option="bishop"><img src="{% static 'images/Bbishop.png' %}"></button>
             <button class="option-button" data-option="knight"><img src="{% static 'images/Bknight.png' %}"></button>
+        </div>
+    </div>
+    <div id="result">
+        <div class="center">
+            <span id="resultText">1 - 0</span>
         </div>
     </div>  
 </body>
