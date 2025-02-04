@@ -20,6 +20,10 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+// delete cookie
+function deleteCookie(name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+}
 // insert all images at the right square
 function insertImage() {
     document.querySelectorAll('.box').forEach(image => {
@@ -62,11 +66,11 @@ function coloring() {
         sq = pos1 + pos2
 
         if (sq % 2 == 0) {
-            color.style.backgroundColor = '#50f55b';
+            color.style.backgroundColor = '#2ab033';
         }
 
         if (sq % 2 !== 0) {
-            color.style.backgroundColor = '#add8e6';
+            color.style.backgroundColor = '#85b4c4';
         }
     })
 }
@@ -94,6 +98,7 @@ function search_piece() {
     })
     return piece;
 }
+// turn king if lost
 function turn_king(turn) {
     let boxes = document.getElementsByClassName("box");
     Array.from(boxes).forEach(box => {
@@ -124,7 +129,89 @@ function promote(square, promotion, turn) {
         document.getElementById(piece).textContent = "";
         insertImage();
         coloring();
+        update_score();
     })
+}
+// update score on screen
+function update_score() {
+    let boxes = document.getElementsByClassName("box");
+    let score = 0;
+    let wqueen = 0;
+    let bqueen = 0;
+    let wrook = 0;
+    let brook = 0;
+    let wbishop = 0;
+    let bbishop = 0;
+    let wknight = 0;
+    let bknight = 0;
+    let wpawn = 0;
+    let bpawn = 0;
+    let white_pieces_string = "";
+    let black_pieces_string = "";
+    let score_screen_w = document.getElementById("white_score");
+    let score_screen_b = document.getElementById("black_score");
+    let score_white = "";
+    let score_black = "";
+
+    Array.from(boxes).forEach(box => {
+        if (box.textContent === "Wqueen ") {
+            score += 9;
+            wqueen +=1;
+        } else if (box.textContent === "Bqueen ") {
+            score -= 9;
+            bqueen +=1;
+        } else if (box.textContent === "Wrook ") {
+            score += 5; 
+            wrook +=1;
+        } else if (box.textContent === "Brook ") {
+            score -= 5;
+            brook +=1;
+        } else if (box.textContent === "Wbishop ") {
+            score += 3;
+            wbishop +=1;
+        } else if (box.textContent === "Bbishop ") {
+            score -= 3;
+            bbishop +=1;
+        } else if (box.textContent === "Wknight ") {
+            score += 3;
+            wknight +=1;
+        } else if (box.textContent === "Bknight ") {
+            score -= 3;
+            bknight +=1;
+        } else if (box.textContent === "Wpawn ") {
+            score += 1;
+            wpawn += 1;
+        } else if (box.textContent === "Bpawn ") {
+            score -= 1;
+            bpawn += 1;
+        }
+    });
+
+    white_pieces_string = "".concat(
+        "&#9817; ".repeat(8-wpawn),
+        "&#9815; ".repeat(2-wbishop),
+        "&#9816;".repeat(2-wknight),
+        "&#9814;".repeat(2-wrook),
+        "&#9813;".repeat(1-wqueen)
+    );
+    black_pieces_string = "".concat(
+        "&#9823; ".repeat(8-bpawn),
+        "&#9821; ".repeat(2-bbishop),
+        "&#9822;".repeat(2-bknight),
+        "&#9820;".repeat(2-brook),
+        "&#9819;".repeat(1-bqueen)
+    );
+
+    if (score > 0) {
+        score_white = `+${score} `;
+    } else if (score < 0) {
+        score_black = `+${Math.abs(score)} `;
+    }
+
+    score_white = score_white.concat(black_pieces_string);
+    score_black = score_black.concat(white_pieces_string);
+    score_screen_w.innerHTML = score_white;
+    score_screen_b.innerHTML = score_black;
 }
 
 function get_piece_from_move(move){
@@ -137,6 +224,7 @@ function get_piece_from_move(move){
 document.addEventListener('DOMContentLoaded', function() {
     insertImage();
     coloring();
+    update_score();
     let boxes = document.getElementsByClassName("box");
     Array.from(boxes).forEach(box => {
         // check for click on square
@@ -156,7 +244,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: 'square=' + encodeURIComponent(square) + '&is_legalmove_request=true'
                 })
                 .then(response => {
-                    return response.json();
+                    return response.text();
+                })
+                .then(text => {
+                    return JSON.parse(text);
                 })
                 .then(data => {
                     color_moves(piece, square, data.moves, turn);
@@ -214,13 +305,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         return response.json();
                     })
                     .then(data => {
-                        console.log("Requested user move")
                         let san = data["special"];
                         if (document.getElementById(square).textContent === "" && san.includes("x")) {
                             let x = parseInt(square.slice(-1));
-                            let y = square.slice(0, 1)
+                            let y = square.slice(0, 1);
                             if (turn === "W") {
-                                x-= 1;
+                                x -= 1;
                             } else if (turn === "B") {
                                 x += 1;
                             }
@@ -243,6 +333,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                         insertImage();
                         coloring();
+                        document.getElementById(piece).style.backgroundColor = "#d8ce34";
+                        document.getElementById(square).style.backgroundColor = "#d8ce34";
+                        update_score();
                         if (data["outcome"]) {
                             document.getElementById("result").style.display = "block";
                             document.getElementById("resultText").textContent = data["outcome"];
@@ -253,66 +346,70 @@ document.addEventListener('DOMContentLoaded', function() {
                         } else {
                             turn = "W";
                         }
-                        console.log("Perfomed user move")
-                    })
-                    .then(()=> {
-                        console.log("Requested computer move")
-                        fetch('', {
+                    
+                        // Jetzt wird der Zug des Computers angefordert
+                        return fetch('', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded',
                                 'X-CSRFToken': csrftoken
                             },
                             body: 'is_computer_request=true'
-                        })
-                        .then(response => {
-                            return response.json();
-                        })
-                        .then(data => {
-                            let san = data["special"];
-                            let values = get_piece_from_move(data["move"])
-                            let piece = values[0]
-                            let square = values[1]
-                            if (document.getElementById(square).textContent === "" && san.includes("x")) {
-                                let x = parseInt(square.slice(-1));
-                                let y = square.slice(0, 1)
-                                if (turn === "W") {
-                                    x-= 1;
-                                } else if (turn === "B") {
-                                    x += 1;
-                                }
-                                document.getElementById(y + x.toString()).textContent = "";
-                            }
-                            document.getElementById(square).textContent = document.getElementById(piece).textContent;
-                            document.getElementById(piece).textContent = "";
-                            if (san === "O-O" && turn === "W") {
-                                document.getElementById("h1").textContent = "";
-                                document.getElementById("f1").textContent = "Wrook";
-                            } else if (san === "O-O-O" && turn === "W") {
-                                document.getElementById("a1").textContent = "";
-                                document.getElementById("d1").textContent = "Wrook";
-                            } else if (san === "O-O" && turn === "B") {
-                                document.getElementById("h8").textContent = "";
-                                document.getElementById("f8").textContent = "Brook";
-                            } else if (san === "O-O-O" && turn === "B") {
-                                document.getElementById("a8").textContent = "";
-                                document.getElementById("d8").textContent = "Brook";
-                            }
-                            insertImage();
-                            coloring();
-                            if (data["outcome"]) {
-                                document.getElementById("result").style.display = "block";
-                                document.getElementById("resultText").textContent = data["outcome"];
-                                turn_king(turn);
-                            }
-                            if (turn === "W") {
-                                turn = "B";
-                            } else {
-                                turn = "W";
-                            }
-                            console.log("Perfomed computer move")
-                        })
+                        });
                     })
+                    .then(response => {
+                        return response.json();
+                    })
+                    .then(data => {
+                        let san = data["special"];
+                        let values = get_piece_from_move(data["move"]);
+                        let piece = values[0];
+                        let square = values[1];
+                        if (document.getElementById(square).textContent === "" && san.includes("x")) {
+                            let x = parseInt(square.slice(-1));
+                            let y = square.slice(0, 1);
+                            if (turn === "W") {
+                                x -= 1;
+                            } else if (turn === "B") {
+                                x += 1;
+                            }
+                            document.getElementById(y + x.toString()).textContent = "";
+                        }
+                        document.getElementById(square).textContent = document.getElementById(piece).textContent;
+                        document.getElementById(piece).textContent = "";
+                        if (san === "O-O" && turn === "W") {
+                            document.getElementById("h1").textContent = "";
+                            document.getElementById("h1").backgroundColor = "#d8ce34";
+                            document.getElementById("f1").textContent = "Wrook";
+                        } else if (san === "O-O-O" && turn === "W") {
+                            document.getElementById("a1").textContent = "";
+                            document.getElementById("a1").backgroundColor = "#d8ce34";
+                            document.getElementById("d1").textContent = "Wrook";
+                        } else if (san === "O-O" && turn === "B") {
+                            document.getElementById("h8").textContent = "";
+                            document.getElementById("h8").backgroundColor = "#d8ce34";
+                            document.getElementById("f8").textContent = "Brook";
+                        } else if (san === "O-O-O" && turn === "B") {
+                            document.getElementById("a8").textContent = "";
+                            document.getElementById("a8").backgroundColor = "#d8ce34";
+                            document.getElementById("d8").textContent = "Brook";
+                        }
+                        insertImage();
+                        coloring();
+                        document.getElementById(piece).style.backgroundColor = "#d8ce34";
+                        document.getElementById(square).style.backgroundColor = "#d8ce34";
+                        update_score();
+                        if (data["outcome"]) {
+                            document.getElementById("result").style.display = "block";
+                            document.getElementById("resultText").textContent = data["outcome"];
+                            turn_king(turn);
+                        }
+                        if (turn === "W") {
+                            turn = "B";
+                        } else {
+                            turn = "W";
+                        }
+                    });                    
                 }              
             }
         });

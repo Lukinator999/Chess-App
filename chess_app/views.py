@@ -16,6 +16,10 @@ def game(request):
         board = chess.Board(request.session['board_fen'])
     else:
         board = chess.Board()
+    # reset board
+    if request.method == 'POST' and request.POST.get('is_newboard_request', None):
+        request.session.flush()
+        return JsonResponse({"response": "Session deleted"})
     # return legal moves
     if request.method == 'POST' and request.POST.get('is_legalmove_request', None):
         square = request.POST.get('square')
@@ -53,7 +57,7 @@ def game(request):
     request.session['board_fen'] = board.fen()
     return render(request, "game.html")
 
-def calcualteMove(board, result_queue):
+def calculateMove(board, result_queue):
     print("Thread started")
     result = bestMove(board)
     print(f"Calculated Move: {result}")
@@ -76,6 +80,7 @@ def computer_game(request, rat):
         return JsonResponse({'moves': square_fields})
     # move piece
     if request.method == 'POST' and request.POST.get('is_move_request', None):
+        print("Request")
         square = request.POST.get('square')
         piece = request.POST.get('piece')
         move = chess.Move.from_uci(piece + square)
@@ -96,8 +101,9 @@ def computer_game(request, rat):
                 'outcome': None if outcome is None else outcome.result(),
                 'special': san
             }
-            thread = threading.Thread(target=calcualteMove(board.fen(), result_queue), args=(result_queue, rat))
+            thread = threading.Thread(target=calculateMove, args=(board.fen(), result_queue))
             thread.start()
+            print("Return")
             return JsonResponse(outcome_dict)
         else:
             return JsonResponse({'error': 'illegal move'}, status=400)

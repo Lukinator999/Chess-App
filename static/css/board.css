@@ -118,6 +118,20 @@ li {
     height: 100px;
 }
 
+.score_div {
+    width: 608px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+#white_score, #black_score {
+    color: white;
+    font-size: 30px;
+    font-family: 'Abstante', sans-serif;
+    line-height: 50px;
+}
+
 .trans img{
     width: 100px;
     height: 100px;

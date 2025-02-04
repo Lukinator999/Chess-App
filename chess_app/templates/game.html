@@ -17,8 +17,12 @@
 </head>
 
 <body class="board">
+    {% csrf_token %}
     <div class="center">
         <h1>GRANDMASTERMIND</h1>
+    </div>
+    <div class="score_div">
+        <span id="black_score">+5 &#9823;</span>
     </div>
     <div>
         <ul>
@@ -116,6 +120,9 @@
             <button id="Bknight"><img src="{% static 'images/Bknight.png' %}"></button>
             <button id="Bbishop"><img src="{% static 'images/Bbishop.png' %}"></button>
         </div>
+    </div>
+    <div class="score_div">
+        <span id="white_score">-2</span>
     </div>
     <div id="modal1" class="modal">
         <div class="modal-content">

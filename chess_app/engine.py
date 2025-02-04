@@ -38,51 +38,71 @@ def evalPosition(board):
             board.turn = not board.turn
             piece = piece.symbol()
             if piece.upper() == piece:
-                count -= len(square_fields)/7
+                count -= len(square_fields)/14
             else:
-                count += len(square_fields)/7
+                count += len(square_fields)/14
             # WHITE
             # rooks
             if piece == "R":
                 count -= 5
                 if b_king_position[1] == square[1] or b_king_position[0] == square[0]:
-                    count -= 0.5
+                    count -= 0.3
             # knights
             elif piece == "N":
                 count -= 3
+                if int(square[1]) >= 3:
+                    count -= 0.5
+                if "c" <= square[0] <= "f":
+                    count -= 0.5
             # bishops
             elif piece == "B":
                 count -= 3
+                if int(square[1]) >= 3:
+                    count -= 0.5
             # queens
             elif piece == "Q":
                 count -= 9
                 if b_king_position[1] == square[1] or b_king_position[0] == square[0]:
-                    count -= 0.5
+                    count -= 0.3
             # pawns
             elif piece == "P":
                 count -= 1
-                count -= int(square[1])/3
+                count -= int(square[1])/2
+            # king
+            elif piece == "K":
+                if int(square[1]) == 1:
+                    count -= 0.5
             # BLACK
             # rooks
             elif piece == "r":
                 count += 5
                 if w_king_position[1] == square[1] or w_king_position[0] == square[0]:
-                    count += 0.5
+                    count += 0.3
             # knights
             elif piece == "n":
                 count += 3
+                if int(square[1]) <= 6:
+                    count += 0.5
+                if "c" <= square[0] <= "f":
+                    count += 0.5
             # bishops
             elif piece == "b":
                 count += 3
+                if int(square[1]) <= 6:
+                    count += 0.5
             # queens
             elif piece == "q":
                 count += 9
                 if w_king_position[1] == square[1] or w_king_position[0] == square[0]:
-                    count += 0.5
+                    count += 0.3
             # pawns
             elif piece == "p":
                 count += 1
-                count += abs(int(square[1])-9)/3
+                count += abs(int(square[1])-9)/2
+            # king
+            elif piece == "K":
+                if int(square[1]) == 1:
+                    count += 0.5
     return count
 
 def bestMove(board_fen):
@@ -105,6 +125,8 @@ def bestMove(board_fen):
             if score < opponent_best_score:
                 opponent_best_score = score
         
+        opponent_best_score -= len(board.attackers(chess.WHITE, chess.parse_square(move.uci()[2:4])))
+        opponent_best_score += len(board.attackers(chess.BLACK, chess.parse_square(move.uci()[2:4])))
         # new minimax value
         if opponent_best_score > best_score:
             best_score = opponent_best_score
